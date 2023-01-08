@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+   
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <meta http-equiv="refresh" content="30; URL=">  <!--30秒で自動更新 -->
+<title>template test</title>
+{% load static %}
+<!--<link rel="stylesheet" href="{% static 'ccc.css' %}"> -->
+<!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+<link rel="stylesheet" href="{% static 'matome.css' %}"> <!--importしてる-->
+</head>
+<body>
+
+
+
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- navbar-inverse で黒系ナビゲーションの指定をしています。-->
+        <!-- navbar-fixed-top でヘッダー固定の指定をしています。-->
+        <div class="container">
+        <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+        <!--button~はウインドウのサイズが780px以下になった時に表示されます。-->
+        <a class="navbar-brand" href="#">抽選場</a>
+        <!--こちらにサイト名を入れます。-->
+        </div>
+        <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+        <!--<li class="active"><a href="#home">ホーム</a></li>-->
+        <li>
+        <form action="{% url 'tyuusenn:yosouhe1' %}" method="POST">
+            {% csrf_token %}
+        
+            
+        <input type="submit" value="グラフで見る"></a>
+        </form>
+        </li>
+        <li>
+            <form action="{% url 'tyuusenn:sousuhe' %}" method="POST">
+            {% csrf_token %}
+        
+            
+        <input type="submit" value="サイトの抽選プログラムのソースコードを見に行く"></a>
+        </form>
+        </li>
+        <li> 
+            <form action="{% url 'tyuusenn:Logout' %}" method="POST">
+                {% csrf_token %}
+            
+                
+            <input type="submit" value="ログアウト"></a>
+            </form>
+        </li>>
+        </ul>
+        </div>
+        <!--/.nav-collapse -->
+        </div>
+        </div>
+ 
+
+
+<!--<body background="{% static 'tt.png' %}" > --背景画像をここで読み込む予定でしたがCSSで読み込むことに -->
+
+
+
+
+
+
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script>
+        function get_time() {
+            // Ajax通信処理
+            $.ajax({
+                // リクエスト送信先URLの設定
+                url: '{% url "tyuusenn:i_ajax" %}',　　// ここで、i_ajaxViewを呼び出している。
+                // 非同期通信フラグ（trueは非同期）
+                async: true,
+                // Ajax通信成功時にレスポンスデータ受け取り&処理実行
+                success: function(data) {　　　　　　　　
+                    document.getElementById("auto").innerHTML = data;
+                }
+            });
+        }
+        // 5秒ごとに実行する
+        $(document).ready(function() {
+            setInterval(get_time, 5000);
+        });
+    </script>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <b><p>水道料金当番投票場へようこそ  30秒に一回投票数が更新されます。</p></b>
+    <b><p>あなたの部屋番号は　303号室 です</p></b>
+    <b><p>異動等により当番を受け持つことができない場合や、当番を引き受けてくださる方がいらっしゃいましたらお手数ですが３０３号室の小倉までご連絡ください。</p></b>
+    <div style=" color: white; background: #f98289; height:100px; padding: 20px; border: 2px dashed rgba(255 , 255 , 255 , 0.5);-moz-border-radius: 6px; -moz-box-shadow: 0 0 0 5px #f98289 , 0 2px 3px 5px rgba(0 , 0 , 0 , 0.5); -webkit-border-radius: 6px; -webkit-box-shadow: 0 0 0 5px #f98289 , 0 2px 3px 5px rgba(0 , 0 , 0 , 0.5); border-radius: 6px; box-shadow: 0 0 0 5px #f98289 , 0 2px 3px 5px rgba(0 , 0 , 0 , 0.5); font-size: 150%; "> 
+        
+    <u><b><h2 id="auto" style="text-align:center;"></h2></b></u><!--ここに投票先の部屋番号表示-->
+    
+    </div>
+    <br>
+    <b><p style="text-align:center;">の部屋番号の方に一票</p></b>
+
+ 
+    
+    {% for names in test  %}
+    <table border="2" width="300" height="50">
+    <tr>
+    <td><b>{{ names.name }}</b></td>
+    <td><b>投票数:{{ names.touhyou }}</b></td>   
+    <td><b>{{ names.bikou }}</b></td>
+    <td><b>id:{{ names.id }}</b></td>
+    </tr>
+</table>
+{% endfor %}
+
+
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+
+
+</body>
+</html>

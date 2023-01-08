@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ja">
+<html>
+<head>
+
+</head>
+<body>
+<br>pythonのdjangoで作成した抽選部分のプログラムになります。</br>
+<br>このページに貼り付けた時点のソースコード、実験環境で動かした際のソースコードですので</br>
+<br>実際の動作環境に移した際の調整により 多少の内容の変更がある可能性がありますが、</br>
+    <br>①BackgroundSchedulerで定期的にプログラム実行 </br>
+    <br>②random.randintで抽選 </br>
+    <br>③Deviceモデルに投票数を追加し、</br>
+    <br>BackgroundSchedulerの実行間隔と同間隔でajax通信にてhtmlに出力(ホームページに出力)</br>
+    <br>という流れは同様です。</br>
+
+    <code>
+        <ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+        <li style="background-color:#EFF;">from django.http import HttpResponse</li>
+        <li style="background-color:#EEF;">from django.shortcuts import render</li>
+        <li style="background-color:#EFF;">import random</li>
+        <li style="background-color:#EEF;">from datetime import datetime, date</li>
+        <li style="background-color:#EFF;">from apscheduler.schedulers.background import BackgroundScheduler</li>
+        <li style="background-color:#EEF;">import sys </li>
+        <li style="background-color:#EFF;">from django.views.generic import View,DetailView,TemplateView</li>
+        <li style="background-color:#EEF;">from datetime import datetime, date</li>
+        <li style="background-color:#EFF;">from .import test</li>
+        <li style="background-color:#EEF;">from .models import Device</li>
+        <li style="background-color:#EFF;">from django.urls import reverse_lazy</li>
+        <li style="background-color:#EEF;">import japanize_matplotlib</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">class X1: #グローバルな変数を用意するためだけの存在</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;kazu = {<font style="color:brown;">"a"</font>:0}</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;">x2 = X1()</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;">def start():</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;scheduler = BackgroundScheduler()</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;scheduler.add_job(rannsuu, <font style="color:brown;">'interval'</font>,  seconds=5)#5秒おきに実行</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;scheduler.start()</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">def rannsuu(): # 任意の関数名  # ここに定期実行したい処理を記述する</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;#print(<font style="color:brown;">"ただいまテスト中"</font>)</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;x3 = random.randint(1,18) #ランダムにid生成。上のクラスのを上書きもする。</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;x2.kazu = {</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;<font style="color:brown;">'x'</font>: x3</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;i = x2.kazu[<font style="color:brown;">"x"</font>] #部屋のidをランダムで取得</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;i2 = Device.objects.get(pk=i)</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;print(i2) #テスト出力</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;i2.touhyou = i2.touhyou + 1 #投票数１プラス</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;print(i2.touhyou) #テスト出力</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;i2.save() </li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;">#本番環境で二回行動するようなら奇数の時選ばれたのを-1マイナス処理で対応</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">def index(request):</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;#print(x2.kazu)</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;contacts = Device.objects.all</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;context = {</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font style="color:brown;">'test'</font>: contacts,</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;return render(request, <font style="color:brown;">'home.html'</font>,context)</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">#　ajax用view</li>
+        <li style="background-color:#EFF;">class c_AjaxView(View):</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;def get(self, request):</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i = x2.kazu[<font style="color:brown;">"x"</font>] #部屋のidをランダムで取得</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i2 = Device.objects.get(pk=i)</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context = {</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font style="color:brown;">'test1'</font>: i2.name</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return HttpResponse(context.values(),request)</li>
+        <li style="background-color:#EFF;">i_ajax = c_AjaxView.as_view()</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">#本番環境で二回行動するようなら奇数の時選ばれたのを-1マイナス処理で対応(重要)</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;">def yosouhee(request): #homeから予想のボタンの押されたら遷移させる</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;if request.method == <font style="color:brown;">'POST'</font>:</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return render(request, <font style="color:brown;">'home2.html'</font>)</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">def sousuhe(request): #homeからソースコードのボタンの押されたら遷移させる</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;if request.method == <font style="color:brown;">'POST'</font>:</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return render(request, <font style="color:brown;">'home3.html'</font>)</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;"><font style="color:brown;">""</font><font style="color:brown;">"</li>
+        <li style="background-color:#EEF;">def kaeru(request): #yosouから投票場ボタンの押されたら遷移させる</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;if request.method == 'POST':</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;contacts = Device.objects.all</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context = {</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'test': contacts,</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return render(request, 'home.html',context)</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;">"</font><font style="color:brown;">""</font></li>
+        <li style="background-color:#EEF;">class Index2(TemplateView):</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;#テンプレートファイル連携</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;template_name = <font style="color:brown;">"home2.html"</font></li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;#変数としてグラフイメージをテンプレートに渡す</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;def get_context_data(self, **kwargs):</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#グラフオブジェクト</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;qs    = Device.objects.all()  #モデルクラス(ProductAテーブル)読込</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x     = [x.name for x in qs]           #X軸データ</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y     = [y.touhyou for y in qs]        #Y軸データ</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#color = [(<font style="color:brown;">'b'</font> if i == max(x) else <font style="color:brown;">'r'</font>) for i in x] # 最大の奴だけ色変える</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chart = test.Plot_Graph(x,y)          #グラフ作成</li>
+        <li style="background-color:#EFF;"></li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#変数を渡す</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context = super().get_context_data(**kwargs)</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;context[<font style="color:brown;">'chart'</font>] = chart</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return context</li>
+        <li style="background-color:#EEF;"></li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;#get処理</li>
+        <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;def get(self, request, *args, **kwargs):</li>
+        <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return super().get(request, *args, **kwargs)</li>
+        </ol></code>
+        <form action="{% url 'tyuusenn:index' %}" method="get">
+            {% csrf_token %}
+            
+            <input type="submit" class="txt" value="投票場に帰る">
+        </form>
+</body>
+</html>

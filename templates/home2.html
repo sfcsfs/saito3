@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<html>
+<head>
+<title>template test</title>
+{% load static %}
+
+<style>
+    .txt {
+  width: 20em;
+  height:5em;
+}
+    </style>
+</head>
+<body>
+<body background="{% static 'vs.png' %}" >
+    
+    <div style="padding: 20px; background: #fff; -webkit-box-shadow: 0 0 50px #f98289 inset, 5px 5px 0 #cecece; -moz-box-shadow: 0 0 50px #f98289 inset, 5px 5px 0 #cecece; box-shadow: 0 0 50px #f98289 inset, 5px 5px 0 #cecece; font-size: 100%;">
+        <h3><b>グラフを出力・更新する　のボタンを押すと押した時点での投票数をグラフ形式でご覧になれます。</b></h3>
+    </div>
+        <img src="data:image/png;base64,{{ chart | safe }}">
+<form action="{% url 'tyuusenn:index' %}" method="get">
+    {% csrf_token %}
+    
+    <input type="submit" class="txt" value="投票場に帰る">
+</form>
+
+<form action="{% url 'tyuusenn:Index2' %}" method="get">
+    {% csrf_token %}
+    
+    <input type="submit" class="txt" value="グラフを出力・更新する">
+</form>
+
+</body>
+</html>
