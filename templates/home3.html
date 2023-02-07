@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <html>
+
 <head>
 
 </head>
+
 <body>
-<br>pythonのdjangoで作成した抽選部分のプログラムになります。</br>
-<br>このページに貼り付けた時点のソースコード、実験環境で動かした際のソースコードですので</br>
-<br>実際の動作環境に移した際の調整により 多少の内容の変更がある可能性がありますが、</br>
+    <br>pythonのdjangoで作成した抽選部分のプログラムになります。</br>
+    <br>このページに貼り付けた時点のソースコード、実験環境で動かした際のソースコードですので</br>
+    <br>実際の動作環境に移した際の調整により 多少の内容の変更がある可能性がありますが、</br>
     <br>①BackgroundSchedulerで定期的にプログラム実行 </br>
     <br>②random.randintで抽選 </br>
     <br>③Deviceモデルに投票数を追加し、</br>
@@ -138,10 +140,11 @@
         <li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;def get(self, request, *args, **kwargs):</li>
         <li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return super().get(request, *args, **kwargs)</li>
         </ol></code>
-        <form action="{% url 'tyuusenn:index' %}" method="get">
-            {% csrf_token %}
-            
-            <input type="submit" class="txt" value="投票場に帰る">
-        </form>
+    <form action="{% url 'tyuusenn:index' %}" method="get">
+        {% csrf_token %}
+
+        <input type="submit" class="txt" value="投票場に帰る">
+    </form>
 </body>
+
 </html>
