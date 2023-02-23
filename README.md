@@ -25,4 +25,4 @@ templates/home.html = Ajaxが実装され一定間隔で投票結果が出力さ
 templates/home2.html = グラフの出力ができるページ。  
 templates/home3.html = 抽選の公平性を担保するため一部のプログラムを紹介しているページ。  
 
-# ログインのためのアカウントはpaizaの方に掲載。
+# ログインのためのアカウントはpaizaの方に掲載しました！
