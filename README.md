@@ -24,3 +24,5 @@ tyuusenn/models.py  = 投票（抽選結果）を格納するためのモデル�
 templates/home.html = Ajaxが実装され一定間隔で投票結果が出力されるメインページ。表を更新するため３０秒で自動リロードされる設定。  
 templates/home2.html = グラフの出力ができるページ。  
 templates/home3.html = 抽選の公平性を担保するため一部のプログラムを紹介しているページ。  
+
+# ログインのためのアカウントはpaizaの方に掲載。
